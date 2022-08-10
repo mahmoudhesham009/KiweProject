@@ -28,8 +28,19 @@ public class User implements UserDetails {
     @Column(name = "EMAIL")
     String email;
 
+    @Column(name = "AGE")
+    Integer age;
+
     @Column(name = "Password")
     String password;
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
     public Long getUserId() {
         return userId;
@@ -78,7 +89,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override

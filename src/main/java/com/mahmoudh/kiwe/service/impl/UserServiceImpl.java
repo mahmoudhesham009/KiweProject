@@ -1,12 +1,11 @@
 package com.mahmoudh.kiwe.service.impl;
 
-import com.mahmoudh.kiwe.UserRepository;
+import com.mahmoudh.kiwe.repository.UserRepository;
 import com.mahmoudh.kiwe.entity.User;
 import com.mahmoudh.kiwe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -34,8 +33,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    boolean isEmail(String emailAddress) {
-        return Pattern.compile("^(.+)@(\\\\S+)$")
+    @Override
+    public boolean isEmail(String emailAddress) {
+        return Pattern.compile("[a-z0-9]+@[a-z]+\\.[a-z]{2,3}")
                 .matcher(emailAddress)
                 .matches();
     }

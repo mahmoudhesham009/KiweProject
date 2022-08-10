@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +25,12 @@ public class SecurityConfiguration {
     private AuthenticationManager authenticationManager;
     private final String secret;
     private final AuthSuccessHandler authSuccessHandler;
+    @Lazy
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Lazy
+    @Autowired
+    private JwtAuthorizationFilter jwtRequestFilter;
 
     public SecurityConfiguration(AuthSuccessHandler authSuccessHandler,@Value("secret") String secret) {
         this.authSuccessHandler = authSuccessHandler;
@@ -32,16 +39,13 @@ public class SecurityConfiguration {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/h2-console/**","/api/user/login","/api/user/signup","/api/user/forgetPassword").permitAll()
-                .antMatchers("/").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(authenticationFilter())
-                .addFilter(new JwtAuthorizationFilter(authenticationManager))
-                .httpBasic(Customizer.withDefaults());
+        http.csrf().disable()
+                .authorizeRequests().antMatchers("/h2-console/**","/api/user/auth/**").permitAll().
+                        anyRequest().authenticated().and().
+                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers().frameOptions().disable();
         return http.build();
     }

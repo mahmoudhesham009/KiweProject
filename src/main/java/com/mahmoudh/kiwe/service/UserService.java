@@ -7,4 +7,5 @@ public interface UserService {
     User updateUser(User user);
     User getUserByEmailOrUserName(String credential);
 
+    boolean isEmail(String emailAddress);
 }

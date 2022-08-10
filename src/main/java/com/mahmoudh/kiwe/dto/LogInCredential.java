@@ -1,4 +1,4 @@
-package com.mahmoudh.kiwe.model;
+package com.mahmoudh.kiwe.dto;
 
 public class LogInCredential {
 
