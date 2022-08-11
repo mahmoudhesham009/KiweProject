@@ -1,5 +1,6 @@
 package com.mahmoudh.kiwe.service.impl;
 
+import com.mahmoudh.kiwe.dto.InsertProductsResponse;
 import com.mahmoudh.kiwe.entity.Product;
 import com.mahmoudh.kiwe.repository.ProductRepository;
 import com.mahmoudh.kiwe.service.ProductService;
@@ -25,5 +26,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findProductsByUserId(Integer userId) {
         return findProductsByUserId(userId);
+    }
+
+    @Override
+    public InsertProductsResponse insertMultipleProduct(List<Product> products) {
+        int uploaded=0;
+        int ignored=0;
+        for(Product p:products){
+            try{
+                saveProduct(p);
+                uploaded++;
+            }catch (Exception e){
+                ignored++;
+            }
+        }
+        return new InsertProductsResponse(uploaded,ignored);
     }
 }

@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "PRODUCT")
+
+@Table(name= "PRODUCT",
+        uniqueConstraints = { @UniqueConstraint(columnNames = { "NAME" }) })
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +28,16 @@ public class Product {
 
     @OneToMany(mappedBy="product")
     private Set<Image> image;
+
+    public Product() {
+    }
+
+    public Product(String name,  String category,Integer quantity, User user) {
+        this.name = name;
+        this.quantity = quantity;
+        this.category = category;
+        this.user = user;
+    }
 
     public Integer getProductId() {
         return productId;
