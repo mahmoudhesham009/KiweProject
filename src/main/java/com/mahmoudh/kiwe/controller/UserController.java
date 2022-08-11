@@ -90,10 +90,9 @@ public class UserController {
             return new ResponseEntity<>(new Message("complete all requirement"), HttpStatus.BAD_REQUEST);
         }
         String newPassword=passwordEncoder.encode(changeBody.getNewPassword());
-        String oldPassword=passwordEncoder.encode(changeBody.getOldPassword());
-        if(!oldPassword.equals(user.getPassword()))
+        if(!passwordEncoder.matches(changeBody.getOldPassword(), user.getPassword()))
             return new ResponseEntity<>(new Message("old password is wrong"), HttpStatus.BAD_REQUEST);
-        if(oldPassword.equals(newPassword))
+        if(passwordEncoder.matches(changeBody.getNewPassword(), user.getPassword()))
             return new ResponseEntity<>(new Message("New password mustn't be similar to old password"), HttpStatus.BAD_REQUEST);
         try{
             user.setPassword(newPassword);

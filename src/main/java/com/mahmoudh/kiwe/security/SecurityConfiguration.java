@@ -24,7 +24,6 @@ public class SecurityConfiguration {
     @Lazy
     private AuthenticationManager authenticationManager;
     private final String secret;
-    private final AuthSuccessHandler authSuccessHandler;
     @Lazy
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -32,8 +31,7 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthorizationFilter jwtRequestFilter;
 
-    public SecurityConfiguration(AuthSuccessHandler authSuccessHandler,@Value("secret") String secret) {
-        this.authSuccessHandler = authSuccessHandler;
+    public SecurityConfiguration(@Value("${jwt.secret}") String secret) {
         this.secret = secret;
     }
 
@@ -50,13 +48,7 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    public JSONAuthenticationFilter authenticationFilter() throws Exception {
-        JSONAuthenticationFilter filter = new JSONAuthenticationFilter();
-        filter.setAuthenticationSuccessHandler(authSuccessHandler);
-        filter.setAuthenticationManager(authenticationManager);
-        return filter;
-    }
+
 
 
 }

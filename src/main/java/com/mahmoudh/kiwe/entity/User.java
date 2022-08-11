@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name= "USERS",
@@ -34,12 +35,23 @@ public class User implements UserDetails {
     @Column(name = "Password")
     String password;
 
+    @OneToMany(mappedBy="user")
+    private Set<Product> product;
+
     public Integer getAge() {
         return age;
     }
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Set<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(Set<Product> product) {
+        this.product = product;
     }
 
     public Long getUserId() {
