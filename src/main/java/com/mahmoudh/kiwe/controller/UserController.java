@@ -67,7 +67,8 @@ public class UserController {
     public ResponseEntity<Message> createUser(@RequestBody User user) throws Exception {
         try {
             Message errorMessage = userService.validateUserSignUp(user);
-            if (errorMessage != null) new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+            if (errorMessage != null) return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User u = userService.saveNewUser(user);
             return new ResponseEntity<>(new Message("user successfully registered"), HttpStatus.OK);
@@ -84,7 +85,7 @@ public class UserController {
         try {
             User user = userService.getUserByEmailOrUserName(principal.getName());
             Message errorMessage = userService.validateChangePassword(changeBody, user);
-            if (errorMessage != null) new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+            if (errorMessage != null) return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
             String newPassword = passwordEncoder.encode(changeBody.getNewPassword());
             user.setPassword(newPassword);
             User u = userService.saveNewUser(user);
