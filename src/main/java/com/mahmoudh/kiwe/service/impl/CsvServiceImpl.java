@@ -25,13 +25,13 @@ public class CsvServiceImpl implements CsvService {
             List<Product> products = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {
-                Product tutorial = new Product(
+                Product product = new Product(
                         csvRecord.get(0),
                         csvRecord.get(1),
-                        Integer.getInteger(csvRecord.get(2)),
+                        Integer.parseInt(csvRecord.get(2)),
                         user
                 );
-                products.add(tutorial);
+                products.add(product);
             }
             return products;
         }
